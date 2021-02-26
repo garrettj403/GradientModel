@@ -1,6 +1,17 @@
-"""Calculate properties of a rough metal surface using the Gradient Model.
+"""Calculate the properties of a rough metal surface using the Gradient Model.
 
-Uses the closed-form expression from:
+References:
+
+   G. Gold and K. Helmreich, “A Physical Surface Roughness Model and Its 
+   Applications,” IEEE Trans. Microw. Theory Tech., vol. 65, no. 10, pp. 
+   3720–3732, Oct. 2017, doi: 10.1109/TMTT.2017.2695192.
+
+   K. Lomakin, G. Gold, and K. Helmreich, “Analytical Waveguide Model 
+   Precisely Predicting Loss and Delay Including Surface Roughness,” IEEE 
+   Trans. Microw. Theory Tech., vol. 66, no. 6, pp. 2649–2662, Jun. 2018, 
+   doi: 10.1109/TMTT.2018.2827383.
+
+This package uses the closed-form solution from:
 
    D. N. Grujic, “Closed-Form Solution of Rough Conductor Surface Impedance,”
    IEEE Trans. Microw. Theory Tech., vol. 66, no. 11, pp. 4677–4683, 2018,
@@ -15,13 +26,13 @@ from scipy.constants import mu_0
 
 
 def mag_field(x, f, rq, sigma0=5.8e7):
-    """Calculate magnetic field tangential to metal surface.
+    """Calculate the magnetic field tangential to the metal surface.
 
     Args:
-        x: position
-        f: frequency
-        rq: rms surface roughness
-        sigma0: dc conductivity
+        x: position relative to surface, in units [m]
+        f: frequency, in units [Hz]
+        rq: rms surface roughness, in units [m]
+        sigma0: dc conductivity, optional, default is 5.8e7, in units [S]
 
     Returns:
         magnetic field
@@ -41,11 +52,11 @@ def mag_field(x, f, rq, sigma0=5.8e7):
     # Angular frequency
     w = 2 * pi * f
     
-    # Eqns 15 and 21
+    # Eqns 15 and 21 from Grujic 2018
     alpha = (1 + 1j) / 2 * rq * sqrt(mu_0 * w * sigma0)
     beta = 0.5 * (sqrt(1 + 4 * alpha ** 2) - 1)
 
-    # Eqn 32
+    # Eqn 32 from Grujic 2018
     zeta = 1 / (1 + exp(2 * (x / chi + xi)))
 
     # Coefficients
@@ -53,6 +64,7 @@ def mag_field(x, f, rq, sigma0=5.8e7):
     a2 = alpha - beta - 1
     b1 = 1 + 2 * alpha
 
+    # Eqn 31 from Grujic 2018
     if isinstance(x, ndarray) and len(x) > 1:
         mag = np.empty_like(x, dtype=complex)
         for i, _z in np.ndenumerate(zeta):
@@ -69,13 +81,14 @@ def mag_field(x, f, rq, sigma0=5.8e7):
 
 
 def surface_impedance(f, rq, x0=None, sigma0=5.8e7):
-    """Calculate surface impedance of rough metal.
+    """Calculate the surface impedance of a rough metal.
 
     Args:
-        f: frequency
-        rq: rms surface roughness
-        x0: starting point for integral
-        sigma0: dc conductivity
+        f: frequency, in units [Hz]
+        rq: rms surface roughness, in units [m]
+        x0: starting point for integral, optional, default is -5*rq, 
+            in units [m]
+        sigma0: dc conductivity, optional, default is 5.8e7, in units [S]
 
     Returns:
         surface impedance
@@ -94,18 +107,17 @@ def surface_impedance(f, rq, x0=None, sigma0=5.8e7):
     w = 2 * pi * f
     
     # Eqns 15 and 21
-    # frequency-dependent
     alpha = (1 + 1j) / 2 * rq * sqrt(mu_0 * w * sigma0)
     beta = 0.5 * (sqrt(1 + 4 * alpha ** 2) - 1)
 
     # Eqn 32
-    # position-dependent
     zeta = 1 / (1 + exp(2 * (x0 / chi + xi)))
 
     # Magnetic field, mag
     mag = mag_field(x0, f, rq, sigma0=sigma0)
     
     # Anti-derivative, bb
+    # Eqn 40 and 41 in Grujic 2018
     a1 = 1 + alpha - beta
     a2 = 2 + alpha + beta
     a3 = alpha
@@ -127,13 +139,14 @@ def surface_impedance(f, rq, x0=None, sigma0=5.8e7):
 
 
 def rough_properties(f, rq, x0=None, sigma0=5.8e7):
-    """Calculate surface properties of rough metal.
+    """Calculate the surface properties of a rough metal.
 
     Args:
-        f: frequency
-        rq: rms surface roughness
-        x0: starting point for integral
-        sigma0: dc conductivity
+        f: frequency, in units [Hz]
+        rq: rms surface roughness, in units [m]
+        x0: starting point for integral, optional, default is -5*rq, 
+            in units [m]
+        sigma0: dc conductivity, optional, default is 5.8e7, in units [S]
 
     Returns:
         surface impedance, effective conductivity, effective permeability
@@ -150,6 +163,6 @@ def rough_properties(f, rq, x0=None, sigma0=5.8e7):
     cond_eff = mu_0 * w / (2 * zs_rough.real ** 2)
 
     # Effective permeability
-    mu_eff = 2 * sigma0 * zs_rough.imag ** 2 / w
+    ur_eff = 2 * sigma0 * zs_rough.imag ** 2 / w / mu_0
 
-    return zs_rough, cond_eff, mu_eff / mu_0
+    return zs_rough, cond_eff, ur_eff 
