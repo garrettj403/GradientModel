@@ -3,6 +3,8 @@ Gradient Model
 
 *Calculate the surface impedance of a rough metal surface using the Gradient Model (GM)*
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4694878.svg)](https://doi.org/10.5281/zenodo.4694878)
+
 References
 ----------
 
