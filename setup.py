@@ -36,6 +36,10 @@ class PyTest(TestCommand):
 
 long_description = read('README.md')
 
+test_deps = ['pytest', ]
+example_deps = ['matplotlib', ]
+extras = {'tests': test_deps, 'examples': example_deps, }
+
 setup(
     name="gradientmodel",
     version="0.0.2",
@@ -52,10 +56,8 @@ setup(
         'scipy',
         'mpmath',
         ],
-    extras_require={
-        # 'testing': ['pytest'],
-        'examples': ['matplotlib', ], },
-    # tests_require=['pytest'],
+    tests_require=test_deps,
+    extras_require=extras,
     # cmdclass={'test': PyTest},
     long_description=long_description,
     long_description_content_type='text/markdown',
