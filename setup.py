@@ -38,7 +38,7 @@ long_description = read('README.md')
 
 setup(
     name="gradientmodel",
-    version="0.0.1",
+    version="0.0.2",
     author="John Garrett",
     author_email="garrettj403@gmail.com",
     description="Calculate the surface impedance of a rough metal surface using the Gradient Model (GM)",
@@ -67,8 +67,8 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7", ],
-    # project_urls={
-    #     'Changelog': 'https://github.com/garrettj403/Waveguide/blob/master/CHANGES.md',
-    #     'Issue Tracker': 'https://github.com/garrettj403/Waveguide/issues',},
+    project_urls={
+        'Changelog': 'https://github.com/garrettj403/GradientModel/blob/master/CHANGES.md',
+        'Issue Tracker': 'https://github.com/garrettj403/GradientModel/issues', },
     # scripts=[],
 )
