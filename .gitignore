@@ -3,6 +3,9 @@
 
 __pycache__/
 
+*-Copy1.ipynb
+wr6.5-waveguide-gold-plated.ipynb
+
 dist/
 gradientmodel.egg-info/
 
