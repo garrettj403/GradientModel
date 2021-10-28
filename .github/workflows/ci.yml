@@ -32,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-${{ matrix.python-version }}-
             ${{ runner.os }}-${{ matrix.python-version }}-
-      - run: pip install -r requirements-dev.txt
       - run: pip install -e .
+      - run: pip install -e .[testing]
       - name: Test
         run: pytest -v
