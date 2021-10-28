@@ -5,4 +5,6 @@ __pycache__/
 
 gradientmodel.egg-info/
 
+misc/
+
 new-version.md
