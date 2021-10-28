@@ -2,7 +2,6 @@ Gradient Model
 ==============
 
 [![PyPI version](https://badge.fury.io/py/gradientmodel.svg)](https://badge.fury.io/py/gradientmodel)
-[![ci](https://github.com/garrettj403/GradientModel/actions/workflows/ci.yml/badge.svg)](https://github.com/garrettj403/GradientModel/actions/workflows/ci.yml)
 [![flake8](https://github.com/garrettj403/GradientModel/actions/workflows/linter.yml/badge.svg)](https://github.com/garrettj403/GradientModel/actions/workflows/linter.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5608414.svg)](https://doi.org/10.5281/zenodo.5608414)
 
